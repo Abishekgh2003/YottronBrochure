@@ -1,4 +1,15 @@
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import aboutImg from "../../assets/images/about.avif";
+
+const stagger = (delay = 0) => ({
+  hidden: { opacity: 0, y: 22 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut", delay },
+  },
+});
 
 const POINTS = [
   {
@@ -15,11 +26,31 @@ const POINTS = [
   },
 ];
 
-export default function AboutUs() {
+export default function AboutUs({ gradientOpacity }) {
+  const aboutRef = useRef(null);
+  const aboutInView = useInView(aboutRef, { once: true, margin: "-80px" });
+
   return (
-    <section id="about" className="relative z-10 px-[5%] py-44" style={{ background: "#fafafa" }}>
+    <section
+      id="about"
+      ref={aboutRef}
+      className="relative z-10 bg-surface px-[5%] py-24"
+    >
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none"
+        style={{
+          background: "linear-gradient(to top, #1a1a2e, transparent)",
+          opacity: gradientOpacity,
+        }}
+      />
+
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-        <div className="relative">
+        <motion.div
+          variants={stagger(0)}
+          initial="hidden"
+          animate={aboutInView ? "show" : "hidden"}
+          className="relative"
+        >
           <div
             className="rounded-2xl overflow-hidden"
             style={{ boxShadow: "0 24px 60px rgba(0,0,0,0.45)" }}
@@ -40,10 +71,15 @@ export default function AboutUs() {
               zIndex: 0,
             }}
           />
-        </div>
+        </motion.div>
 
-        <div className="flex flex-col gap-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-[1.18]">
+        <motion.div
+          variants={stagger(0.1)}
+          initial="hidden"
+          animate={aboutInView ? "show" : "hidden"}
+          className="flex flex-col gap-10"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-light leading-[1.18]">
             <em
               style={{
                 fontStyle: "italic",
@@ -57,18 +93,24 @@ export default function AboutUs() {
           </h2>
 
           <div className="flex flex-col gap-8">
-            {POINTS.map(({ title, desc }) => (
-              <div key={title} className="flex flex-col gap-2">
-                <h3 className="text-gray-900 font-bold text-base md:text-lg leading-snug">
+            {POINTS.map(({ title, desc }, i) => (
+              <motion.div
+                key={title}
+                variants={stagger(0.1 + i * 0.1)}
+                initial="hidden"
+                animate={aboutInView ? "show" : "hidden"}
+                className="flex flex-col gap-2"
+              >
+                <h3 className="text-light font-bold text-base md:text-lg leading-snug">
                   {title}
                 </h3>
-                <p className="text-gray-600 text-base md:text-lg leading-relaxed">
+                <p className="text-light/55 text-sm md:text-base leading-relaxed">
                   {desc}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

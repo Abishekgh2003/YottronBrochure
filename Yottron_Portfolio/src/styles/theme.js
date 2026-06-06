@@ -20,9 +20,9 @@ export const THEME = {
   },
 
   fontSize: {
-    sm: "1rem",
-    base: "1.125rem",
-    lg: "1.25rem",
+    sm: "0.875rem",
+    base: "1rem",
+    lg: "1.125rem",
 
     h1: "2.5rem",
     h2: "2rem",
